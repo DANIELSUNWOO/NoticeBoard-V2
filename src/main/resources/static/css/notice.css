@@ -1,0 +1,328 @@
+/* ── Google Fonts ─────────────────────────────────────── */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&display=swap');
+
+/* ── CSS 변수 ─────────────────────────────────────────── */
+:root {
+    --primary:       #2563eb;
+    --primary-dark:  #1d4ed8;
+    --primary-light: #eff6ff;
+    --danger:        #dc2626;
+    --danger-light:  #fef2f2;
+    --success:       #16a34a;
+    --pinned-bg:     #fefce8;
+    --pinned-border: #fde68a;
+    --text-main:     #111827;
+    --text-sub:      #6b7280;
+    --text-muted:    #9ca3af;
+    --border:        #e5e7eb;
+    --bg:            #f9fafb;
+    --white:         #ffffff;
+    --radius:        8px;
+    --shadow:        0 1px 4px rgba(0,0,0,.08);
+    --shadow-md:     0 4px 16px rgba(0,0,0,.10);
+}
+
+/* ── Reset ────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+    font-family: 'Noto Sans KR', sans-serif;
+    font-size: 14px;
+    color: var(--text-main);
+    background: var(--bg);
+    line-height: 1.6;
+}
+
+a { color: var(--primary); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* ── 레이아웃 컨테이너 ────────────────────────────────── */
+.container {
+    max-width: 960px;
+    margin: 48px auto;
+    padding: 0 20px;
+}
+
+/* ── 페이지 헤더 ──────────────────────────────────────── */
+.page-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 2px solid var(--primary);
+}
+
+.page-header h1 {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--text-main);
+    letter-spacing: -0.5px;
+}
+
+/* ── 버튼 ─────────────────────────────────────────────── */
+.btn {
+    display: inline-block;
+    padding: 8px 20px;
+    border-radius: var(--radius);
+    font-size: 13px;
+    font-weight: 600;
+    font-family: inherit;
+    cursor: pointer;
+    border: none;
+    transition: all .15s;
+    text-decoration: none;
+}
+.btn:hover { opacity: .88; transform: translateY(-1px); text-decoration: none; }
+.btn:active { transform: translateY(0); }
+
+.btn-primary  { background: var(--primary); color: var(--white); }
+.btn-secondary{ background: var(--white); color: var(--text-sub); border: 1px solid var(--border); }
+.btn-danger   { background: var(--danger); color: var(--white); }
+
+/* ── 배지 ─────────────────────────────────────────────── */
+.badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+    vertical-align: middle;
+    margin-right: 4px;
+}
+.badge-pinned { background: #fef3c7; color: #92400e; }
+.badge-secret { background: #e0e7ff; color: #3730a3; }
+
+/* ══════════════════════════════════════════════════════
+   목록 (list.html)
+══════════════════════════════════════════════════════ */
+.notice-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: var(--white);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    margin-bottom: 20px;
+}
+
+.notice-table thead {
+    background: #f3f4f6;
+}
+
+.notice-table th {
+    padding: 13px 16px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-sub);
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+}
+
+.notice-table td {
+    padding: 13px 16px;
+    border-bottom: 1px solid #f3f4f6;
+    vertical-align: middle;
+    color: var(--text-main);
+}
+
+.notice-table tbody tr:last-child td { border-bottom: none; }
+.notice-table tbody tr:hover td { background: #f9fafb; }
+
+.notice-table .col-num    { width: 70px;  text-align: center; }
+.notice-table .col-author { width: 100px; }
+.notice-table .col-date   { width: 110px; color: var(--text-sub); }
+.notice-table .col-view   { width: 60px;  text-align: center; color: var(--text-muted); }
+
+/* 고정글 행 */
+.pinned-row td { background: var(--pinned-bg) !important; }
+.pinned-row:hover td { background: #fef9c3 !important; }
+
+.empty-row { text-align: center; color: var(--text-muted); padding: 48px 0 !important; }
+.secret-title { color: var(--text-muted); font-style: italic; }
+
+/* ── 페이지네이션 ─────────────────────────────────────── */
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 4px;
+    margin: 20px 0 10px;
+}
+
+.page-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    background: var(--white);
+    color: var(--text-main);
+    font-size: 13px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: all .15s;
+}
+.page-btn:hover { background: var(--primary-light); border-color: var(--primary); color: var(--primary); text-decoration: none; }
+.page-btn.active { background: var(--primary); border-color: var(--primary); color: var(--white); }
+.page-btn-arrow { width: auto; padding: 0 12px; }
+
+.total-count { text-align: right; color: var(--text-muted); font-size: 12px; margin-top: 6px; }
+
+/* ══════════════════════════════════════════════════════
+   상세 (detail.html)
+══════════════════════════════════════════════════════ */
+.notice-detail {
+    background: var(--white);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    margin-bottom: 20px;
+}
+
+.detail-header {
+    padding: 28px 32px 20px;
+    border-bottom: 1px solid var(--border);
+}
+
+.detail-title {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text-main);
+    margin-bottom: 12px;
+    line-height: 1.4;
+}
+
+.detail-meta {
+    font-size: 13px;
+    color: var(--text-sub);
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+}
+
+.detail-meta span { display: flex; align-items: center; gap: 4px; }
+
+.detail-info-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.detail-info-table th {
+    width: 100px;
+    padding: 14px 32px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-sub);
+    background: #f9fafb;
+    border-bottom: 1px solid #f3f4f6;
+    text-align: left;
+    vertical-align: top;
+}
+
+.detail-info-table td {
+    padding: 14px 24px;
+    border-bottom: 1px solid #f3f4f6;
+    color: var(--text-main);
+    vertical-align: top;
+}
+
+.detail-info-table tr:last-child th,
+.detail-info-table tr:last-child td { border-bottom: none; }
+
+.detail-content-cell {
+    min-height: 160px;
+    white-space: pre-wrap;
+    line-height: 1.8;
+}
+
+.detail-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 32px;
+    border-top: 1px solid var(--border);
+    background: #f9fafb;
+}
+
+.detail-actions { display: flex; gap: 8px; align-items: center; }
+
+/* ══════════════════════════════════════════════════════
+   폼 (form.html / edit-form.html)
+══════════════════════════════════════════════════════ */
+.notice-form {
+    background: var(--white);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 36px;
+}
+
+.form-group { margin-bottom: 22px; }
+
+.form-group label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--text-sub);
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.form-group input[type="text"],
+.form-group textarea {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    font-size: 14px;
+    font-family: inherit;
+    color: var(--text-main);
+    background: var(--white);
+    transition: border-color .15s, box-shadow .15s;
+    outline: none;
+    resize: vertical;
+}
+
+.form-group input[type="text"]:focus,
+.form-group textarea:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(37,99,235,.12);
+}
+
+.form-options {
+    display: flex;
+    gap: 24px;
+    margin-bottom: 28px;
+    padding: 16px;
+    background: #f9fafb;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-main);
+    cursor: pointer;
+}
+
+.checkbox-label input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    accent-color: var(--primary);
+    cursor: pointer;
+}
+
+.form-buttons {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border);
+}

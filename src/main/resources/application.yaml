@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: noticeboardV2
+  datasource:
+    url: jdbc:mysql://localhost:3306/noticeboardV2
+    username: sunwoo3
+    password: sunwoo3pw
