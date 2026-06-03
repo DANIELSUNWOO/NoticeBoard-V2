@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>공지사항 등록</title>
+    <link rel="stylesheet" th:href="@{/css/notice.css}">
+</head>
+<body>
+<div class="container">
+
+    <div class="page-header">
+        <h1>글쓰기</h1>
+    </div>
+
+    <form th:action="@{/notices}" th:object="${notice}" method="post" class="notice-form">
+
+        <div class="form-group">
+            <label>제목</label>
+            <input type="text" th:field="*{title}" placeholder="제목을 입력하세요">
+        </div>
+
+        <!-- 작성자 칸 없음 → 로그인 아이디로 자동 설정 -->
+        <!-- 고정글/비밀글 옵션 없음 → 일반 회원은 설정 불가 -->
+
+        <div class="form-group">
+            <label>내용</label>
+            <textarea th:field="*{content}" rows="12" placeholder="내용을 입력하세요"></textarea>
+        </div>
+
+        <div class="form-buttons">
+            <a th:href="@{/notices}" class="btn btn-secondary">취소</a>
+            <button type="submit" class="btn btn-primary">등록</button>
+        </div>
+
+        <div class="form-options">
+            <label class="checkbox-label">
+                <input type="checkbox" th:field="*{secret}"> 비밀글
+            </label>
+        </div>
+
+    </form>
+
+</div>
+</body>
+</html>

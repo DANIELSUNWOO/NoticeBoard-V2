@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>공지사항</title>
+    <link rel="stylesheet" th:href="@{/css/notice.css}">
+</head>
+<body>
+<div class="container">
+
+    <div class="page-header">
+        <h1>공지사항</h1>
+        <div style="display:flex; gap:8px; align-items:center;">
+            <span th:text="'👤 ' + ${loginUser}"></span>
+            <a th:href="@{/notices/new}" class="btn btn-primary">글쓰기</a>
+            <form th:action="@{/member/logout}" method="post">
+                <button type="submit" class="btn btn-secondary">로그아웃</button>
+            </form>
+        </div>
+    </div>
+
+    <table class="notice-table">
+        <thead>
+        <tr>
+            <th class="col-num">번호</th>
+            <th>제목</th>
+            <th class="col-author">작성자</th>
+            <th class="col-date">작성일</th>
+            <th class="col-view">조회수</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:if="${noticePage.content.empty}">
+            <td colspan="5" class="empty-row">등록된 공지사항이 없습니다.</td>
+        </tr>
+        <tr th:each="notice, noticeStat : ${noticePage.content}"
+            th:classappend="${notice.pinned} ? 'pinned-row'">
+            <td class="col-num">
+                <span th:if="${notice.pinned}" class="badge badge-pinned">고정</span>
+                <span th:unless="${notice.pinned}"
+                      th:text="${noticePage.totalElements - noticePage.number * 10 - noticeStat.index}">
+                </span>
+            </td>
+            <td>
+                <!-- 비밀글은 클릭 불가 -->
+                <span th:if="${notice.secret && notice.author != loginUser}" class="secret-title">
+    <span class="badge badge-secret">비밀</span> 비밀글입니다.
+</span>
+                <a th:if="${!notice.secret || notice.author == loginUser}"
+                   th:href="@{/notices/{id}(id=${notice.id})}"
+                   th:text="${notice.secret ? notice.title : notice.title}"></a>
+            </td>
+            <td th:text="${notice.author}"></td>
+            <td class="col-date" th:text="${#temporals.format(notice.createdAt, 'yyyy-MM-dd')}"></td>
+            <td class="col-view" th:text="${notice.viewCount}"></td>
+        </tr>
+        </tbody>
+    </table>
+
+    <!-- 페이지네이션 -->
+    <div class="pagination" th:if="${noticePage.totalPages > 0}">
+        <a th:if="${noticePage.hasPrevious()}"
+           th:href="@{/notices(page=${noticePage.number - 1})}"
+           class="page-btn page-btn-arrow">&#8592; 이전</a>
+
+        <th:block th:each="i : ${#numbers.sequence(0, noticePage.totalPages - 1)}">
+            <a th:href="@{/notices(page=${i})}"
+               th:text="${i + 1}"
+               th:classappend="${i == noticePage.number} ? ' active'"
+               class="page-btn"></a>
+        </th:block>
+
+        <a th:if="${noticePage.hasNext()}"
+           th:href="@{/notices(page=${noticePage.number + 1})}"
+           class="page-btn page-btn-arrow">다음 &#8594;</a>
+    </div>
+
+    <p class="total-count" th:text="'전체 ' + ${noticePage.totalElements} + '건'"></p>
+
+</div>
+</body>
+</html>

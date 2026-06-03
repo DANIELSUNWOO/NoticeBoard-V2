@@ -65,12 +65,12 @@ public class MemberController {
 
         // 로그인 성공 → Cookie에 username과 role 저장
         Cookie usernameCookie = new Cookie("loginUser", username);
-        usernameCookie.setMaxAge(60 * 60 * 24);  // 24시간
+        usernameCookie.setMaxAge(60 * 30);  // 30분
         usernameCookie.setPath("/");
         response.addCookie(usernameCookie);
 
         Cookie roleCookie = new Cookie("loginRole", member.get().getRole());
-        roleCookie.setMaxAge(60 * 60 * 24);
+        roleCookie.setMaxAge(60 * 30); // 30분
         roleCookie.setPath("/");
         response.addCookie(roleCookie);
 

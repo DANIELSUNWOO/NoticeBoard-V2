@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${notice.title}">공지사항 상세</title>
+    <link rel="stylesheet" th:href="@{/css/notice.css}">
+</head>
+<body>
+<div class="container">
+
+    <div class="notice-detail">
+        <div class="detail-header">
+            <div>
+                <span th:if="${notice.pinned}" class="badge badge-pinned">고정</span>
+            </div>
+            <h2 class="detail-title" th:text="${notice.title}"></h2>
+            <div class="detail-meta">
+                <span>✍ <span th:text="${notice.author}"></span></span>
+                <span>🕐 <span th:text="${#temporals.format(notice.createdAt, 'yyyy-MM-dd HH:mm')}"></span></span>
+                <span>👁 <span th:text="${notice.viewCount}"></span></span>
+            </div>
+        </div>
+
+        <table class="detail-info-table">
+            <tr>
+                <th>내용</th>
+                <td class="detail-content-cell" th:text="${notice.content}"></td>
+            </tr>
+        </table>
+
+        <div class="detail-footer">
+            <a th:href="@{/notices}" class="btn btn-secondary">목록</a>
+            <!-- 비회원은 수정/삭제 버튼 없음 -->
+            <div style="display:flex; gap:8px; align-items:center;">
+                <span style="color: var(--text-muted); font-size:13px;">글쓰기 및 댓글은 로그인 후 이용 가능합니다.</span>
+                <a th:href="@{/member/login}" class="btn btn-primary">로그인</a>
+            </div>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>
