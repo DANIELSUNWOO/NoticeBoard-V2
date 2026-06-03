@@ -11,7 +11,7 @@
         <h1>로그인</h1>
     </div>
 
-    <form th:action="@{/templates/member/login}" method="post" class="notice-form">
+    <form th:action="@{/member/login}" method="post" class="notice-form">
         <div th:if="${errorMessage}" class="alert alert-danger"
              th:text="${errorMessage}"></div>
 

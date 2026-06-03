@@ -1,20 +1,16 @@
 package org.example.noticeboardv2.controller;
 
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.example.noticeboardv2.domain.Notice;
 import org.example.noticeboardv2.service.NoticeService;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
-
-
-import jakarta.servlet.http.Cookie;
-import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
@@ -35,8 +31,10 @@ public class NoticeController {
 
         Page<Notice> noticePage = noticeService.getNotices(pageable);
         model.addAttribute("noticePage", noticePage);
-        model.addAttribute("isAdmin", isAdmin(request));
         model.addAttribute("loginUser", getCookieValue(request, "loginUser"));
+
+        // 관리자 → 관리자용 페이지
+        if (isAdmin(request)) return "notice/admin/list";
         return "notice/list";
     }
 
@@ -54,6 +52,8 @@ public class NoticeController {
 //        model.addAttribute("currentPage", page);
 //        return "notice/list";
 //    }
+
+    // ── 쿠키 헬퍼 메서드 ──────────────────────────────────────────────────
 
     // ── 쿠키 헬퍼 메서드 ──────────────────────────────────────────────────
 
@@ -88,24 +88,31 @@ public class NoticeController {
         }
 
         model.addAttribute("notice", notice);
-        model.addAttribute("isAdmin", isAdmin(request));
         model.addAttribute("loginUser", getCookieValue(request, "loginUser"));
+
+        // 관리자 → 관리자용 상세 페이지
+        if (isAdmin(request)) return "notice/admin/detail";
         return "notice/detail";
     }
+
     // ── 등록 폼 ───────────────────────────────────────────────────────────
 
     @GetMapping("/new")
     public String createForm(HttpServletRequest request, Model model) {
         if (!isAdmin(request)) return "redirect:/notices";
         model.addAttribute("notice", new Notice());
-        return "notice/form";
+        return "notice/admin/form";
     }
+
     // ── 등록 처리 ─────────────────────────────────────────────────────────
 
     @PostMapping
     public String create(@ModelAttribute Notice notice,
                          HttpServletRequest request) {
         if (!isAdmin(request)) return "redirect:/notices";
+
+        // 작성자를 로그인한 아이디로 자동 설정
+        notice.setAuthor(getCookieValue(request, "loginUser"));
         noticeService.saveNotice(notice);
         return "redirect:/notices";
     }
@@ -117,9 +124,16 @@ public class NoticeController {
                            HttpServletRequest request, Model model) {
         if (!isAdmin(request)) return "redirect:/notices";
         Notice notice = noticeService.getNotice(id);
+
+        // 관리자는 자신이 작성한 글만 수정 가능
+        if (!notice.getAuthor().equals(getCookieValue(request, "loginUser"))) {
+            return "redirect:/notices/" + id;
+        }
+
         model.addAttribute("notice", notice);
-        return "notice/edit-form";
+        return "notice/admin/form";
     }
+
 
     // ── 수정 처리 ─────────────────────────────────────────────────────────
 
@@ -129,6 +143,12 @@ public class NoticeController {
                        HttpServletRequest request) {
         if (!isAdmin(request)) return "redirect:/notices";
         Notice existing = noticeService.getNotice(id);
+
+        // 관리자는 자신이 작성한 글만 수정 가능
+        if (!existing.getAuthor().equals(getCookieValue(request, "loginUser"))) {
+            return "redirect:/notices/" + id;
+        }
+
         existing.update(form.getTitle(), form.getContent(),
                 form.isPinned(), form.isSecret());
         noticeService.updateNotice(existing);

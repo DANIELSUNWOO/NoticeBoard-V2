@@ -2,7 +2,7 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>공지사항</title>
+    <title>공지사항 (관리자)</title>
     <link rel="stylesheet" th:href="@{/css/notice.css}">
 </head>
 <body>
@@ -11,8 +11,8 @@
     <div class="page-header">
         <h1>공지사항</h1>
         <div style="display:flex; gap:8px; align-items:center;">
-            <span th:text="'👤 ' + ${loginUser}"></span>
-            <a th:if="${isAdmin}" th:href="@{/notices/new}" class="btn btn-primary">글쓰기</a>
+            <span th:text="'👤 ' + ${loginUser} + ' (관리자)'"></span>
+            <a th:href="@{/notices/new}" class="btn btn-primary">글쓰기</a>
             <form th:action="@{/member/logout}" method="post">
                 <button type="submit" class="btn btn-secondary">로그아웃</button>
             </form>
@@ -27,11 +27,12 @@
             <th class="col-author">작성자</th>
             <th class="col-date">작성일</th>
             <th class="col-view">조회수</th>
+            <th class="col-action">관리</th>
         </tr>
         </thead>
         <tbody>
         <tr th:if="${noticePage.content.empty}">
-            <td colspan="5" class="empty-row">등록된 공지사항이 없습니다.</td>
+            <td colspan="6" class="empty-row">등록된 공지사항이 없습니다.</td>
         </tr>
         <tr th:each="notice, noticeStat : ${noticePage.content}"
             th:classappend="${notice.pinned} ? 'pinned-row'">
@@ -42,16 +43,21 @@
                 </span>
             </td>
             <td>
-                <span th:if="${notice.secret}" class="secret-title">
-                    <span class="badge badge-secret">비밀</span> 비밀글입니다.
-                </span>
-                <a th:unless="${notice.secret}"
-                   th:href="@{/notices/{id}(id=${notice.id})}"
+                <!-- 관리자는 비밀글도 클릭 가능 -->
+                <span th:if="${notice.secret}" class="badge badge-secret">비밀</span>
+                <a th:href="@{/notices/{id}(id=${notice.id})}"
                    th:text="${notice.title}"></a>
             </td>
             <td th:text="${notice.author}"></td>
             <td class="col-date" th:text="${#temporals.format(notice.createdAt, 'yyyy-MM-dd')}"></td>
             <td class="col-view" th:text="${notice.viewCount}"></td>
+            <td class="col-action">
+                <!-- 삭제 버튼만 표시 (수정은 상세에서 본인 글만) -->
+                <form th:action="@{/notices/{id}/delete(id=${notice.id})}" method="post"
+                      onsubmit="return confirm('정말 삭제하시겠습니까?')">
+                    <button type="submit" class="btn btn-danger btn-sm">삭제</button>
+                </form>
+            </td>
         </tr>
         </tbody>
     </table>

@@ -272,7 +272,10 @@ a:hover { text-decoration: underline; }
 }
 
 .form-group input[type="text"],
+.form-group input[type="password"],
+.form-group input[type="email"],
 .form-group textarea {
+
     width: 100%;
     padding: 10px 14px;
     border: 1px solid var(--border);
@@ -336,3 +339,6 @@ a:hover { text-decoration: underline; }
     margin-bottom: 16px;
     font-size: 13px;
 }
+
+.col-action { width: 80px; text-align: center; }
+.btn-sm { padding: 4px 10px; font-size: 12px; }
